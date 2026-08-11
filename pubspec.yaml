@@ -1,0 +1,48 @@
+name: tourix
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  dio: ^5.11.0
+  flutter_bloc: ^9.1.1
+  equatable: ^2.1.0
+  google_fonts: ^8.2.0
+  flutter_svg: ^2.3.0
+  google_maps_flutter: ^2.18.0
+  geolocator: ^14.0.3
+  mobile_scanner: ^7.4.0
+  shared_preferences: ^2.5.5
+  cached_network_image: ^3.4.1
+  video_player: ^2.9.2
+  image_picker: ^1.1.2
+  path_provider: ^2.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/videos/tourix.mp4
+    - assets/icons/app_icon.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
