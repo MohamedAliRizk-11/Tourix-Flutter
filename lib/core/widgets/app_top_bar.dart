@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../constants/app_spacing.dart';
+import 'user_avatar.dart';
+import 'avatar_picker_sheet.dart';
 
 class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
   final String? greeting;
@@ -16,6 +19,10 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.onNotificationTap,
     this.showBackButton = false,
   });
+
+  Future<void> _openAvatarPicker(BuildContext context) async {
+    await AvatarPickerSheet.show(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +43,10 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )
             else
-              const CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.surfaceLight,
-                child: Icon(Icons.person, color: AppColors.textMuted, size: 20),
-              ),
+              UserAvatar(radius: 20, onTap: () => _openAvatarPicker(context)),
+
             const SizedBox(width: AppSpacing.sm),
+
             Expanded(
               child: greeting != null
                   ? Column(
@@ -58,6 +63,7 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                       textAlign: TextAlign.center,
                     ),
             ),
+
             IconButton(
               onPressed: onNotificationTap,
               icon: const Icon(

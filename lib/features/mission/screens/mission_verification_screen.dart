@@ -51,7 +51,7 @@ class _MissionViewState extends State<_MissionView> {
                 ),
                 title: Text('تم التحقق! 🎉', style: AppTextStyles.heading),
                 content: Text(
-                  '${state.message}\nحصلت على ${state.xpEarned} XP',
+                  '${state.message}\nحصلت على ${state.quest.rewardPoints} نقطة',
                   style: AppTextStyles.bodyMedium,
                 ),
                 actions: [
@@ -98,7 +98,6 @@ class _MissionViewState extends State<_MissionView> {
                 style: AppTextStyles.bodyMedium,
               ),
               const SizedBox(height: AppSpacing.lg),
-
               Row(
                 children: [
                   Expanded(
@@ -119,9 +118,7 @@ class _MissionViewState extends State<_MissionView> {
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
-
               _tabIndex == 0 ? const GpsRadarView() : const QrScannerView(),
-
               if (quest.description.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.xl),
                 Text('MISSION BRIEF', style: AppTextStyles.labelSmall),

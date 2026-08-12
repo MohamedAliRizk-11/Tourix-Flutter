@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import '../../../core/routing/route_names.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/widgets/app_top_bar.dart';
+import '../../../core/widgets/user_avatar.dart';
+import '../../../core/widgets/avatar_picker_sheet.dart';
 import '../../../core/services/user_session.dart';
 import '../../../core/services/token_storage.dart';
 import '../../../core/cubit/favorites_cubit.dart';
 import '../../../core/cubit/favorites_state.dart';
+
 import '../cubit/profile_cubit.dart';
 import '../cubit/profile_state.dart';
 import '../widgets/profile_stat_tile.dart';
@@ -32,6 +36,7 @@ class _ProfileView extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     UserSession.instance.clear();
     await TokenStorage.clear();
+
     if (context.mounted) {
       Navigator.pushNamedAndRemoveUntil(
         context,
@@ -41,6 +46,10 @@ class _ProfileView extends StatelessWidget {
     }
   }
 
+  Future<void> _openAvatarPicker(BuildContext context) async {
+    await AvatarPickerSheet.show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,12 +57,16 @@ class _ProfileView extends StatelessWidget {
       appBar: const AppTopBar(),
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          if (state is ProfileLoading)
+          if (state is ProfileLoading) {
             return const Center(child: CircularProgressIndicator());
-          if (state is ProfileError)
+          }
+
+          if (state is ProfileError) {
             return Center(
               child: Text(state.message, style: AppTextStyles.bodyMedium),
             );
+          }
+
           final profile = (state as ProfileLoaded).profile;
 
           return ListView(
@@ -65,19 +78,21 @@ class _ProfileView extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    const CircleAvatar(
+                    UserAvatar(
                       radius: 44,
-                      backgroundColor: AppColors.surfaceLight,
-                      child: Icon(
-                        Icons.person,
-                        color: AppColors.textMuted,
-                        size: 40,
-                      ),
+                      onTap: () => _openAvatarPicker(context),
                     ),
+
                     const SizedBox(height: AppSpacing.sm),
+
                     Text(profile.name, style: AppTextStyles.displayMedium),
+
+                    const SizedBox(height: 2),
+
                     Text(profile.email, style: AppTextStyles.bodyMedium),
+
                     const SizedBox(height: 4),
+
                     Text(
                       'Level ${profile.level} · ${profile.xp} XP',
                       style: AppTextStyles.bodySmall.copyWith(
@@ -87,7 +102,9 @@ class _ProfileView extends StatelessWidget {
                   ],
                 ),
               ),
+
               const SizedBox(height: AppSpacing.lg),
+
               Row(
                 children: [
                   Expanded(
@@ -97,7 +114,9 @@ class _ProfileView extends StatelessWidget {
                       value: '${profile.totalPoints}',
                     ),
                   ),
+
                   const SizedBox(width: AppSpacing.sm),
+
                   Expanded(
                     child: ProfileStatTile(
                       icon: Icons.explore_outlined,
@@ -105,7 +124,9 @@ class _ProfileView extends StatelessWidget {
                       value: '${profile.activeQuests}',
                     ),
                   ),
+
                   const SizedBox(width: AppSpacing.sm),
+
                   Expanded(
                     child: ProfileStatTile(
                       icon: Icons.bookmark_outline,
@@ -115,19 +136,26 @@ class _ProfileView extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: AppSpacing.lg),
+
               Text('Favorites', style: AppTextStyles.displayMedium),
+
               const SizedBox(height: AppSpacing.sm),
+
               BlocBuilder<FavoritesCubit, FavoritesState>(
                 builder: (context, favState) {
-                  if (favState.isLoading)
+                  if (favState.isLoading) {
                     return const Center(child: CircularProgressIndicator());
+                  }
+
                   if (favState.places.isEmpty) {
                     return Text(
                       'لا يوجد أماكن مفضلة بعد',
                       style: AppTextStyles.bodySmall,
                     );
                   }
+
                   return Column(
                     children: favState.places
                         .map(
@@ -161,13 +189,16 @@ class _ProfileView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+
                                 const SizedBox(width: AppSpacing.sm),
+
                                 Expanded(
                                   child: Text(
                                     place.name,
                                     style: AppTextStyles.bodyLarge,
                                   ),
                                 ),
+
                                 IconButton(
                                   icon: const Icon(
                                     Icons.favorite,
@@ -186,7 +217,9 @@ class _ProfileView extends StatelessWidget {
                   );
                 },
               ),
+
               const SizedBox(height: AppSpacing.lg),
+
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
@@ -208,6 +241,7 @@ class _ProfileView extends StatelessWidget {
                   ),
                 ),
               ),
+
               const SizedBox(height: AppSpacing.xl),
             ],
           );

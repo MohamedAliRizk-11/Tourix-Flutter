@@ -100,7 +100,11 @@ class _GpsRadarViewState extends State<GpsRadarView> {
               ],
             ),
             const SizedBox(height: AppSpacing.sm),
-            _InfoBox(label: 'LOCATION', value: quest.title, fullWidth: true),
+            _InfoBox(
+              label: 'LOCATION',
+              value: quest.placeName,
+              fullWidth: true,
+            ),
             const SizedBox(height: AppSpacing.lg),
             if (state is MissionFailed)
               Padding(

@@ -37,7 +37,7 @@ class DestinationOfDayCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
           child: Stack(
             children: [
-              CachedNetworkImage(
+              /* CachedNetworkImage(
                 imageUrl: place.imageUrl,
                 height: 340,
                 width: double.infinity,
@@ -45,7 +45,21 @@ class DestinationOfDayCard extends StatelessWidget {
                 errorWidget: (_, __, ___) =>
                     Container(color: AppColors.surface, height: 340),
               ),
-
+*/
+              Image.network(
+                place.imageUrl,
+                height: 340,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) {
+                  return Container(
+                    height: 340,
+                    color: AppColors.surface,
+                    child: const Center(child: Text('Image failed')),
+                  );
+                },
+              ),
+              //----------------------------------
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(

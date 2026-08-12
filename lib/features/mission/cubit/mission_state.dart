@@ -1,39 +1,55 @@
-import 'package:equatable/equatable.dart';
+import '../../../core/models/quest_model.dart';
 
-abstract class MissionState extends Equatable {
+abstract class MissionState {
   const MissionState();
-  @override
-  List<Object?> get props => [];
 }
 
-class MissionIdle extends MissionState {}
+class MissionInitial extends MissionState {
+  const MissionInitial();
+}
 
-class MissionLocating extends MissionState {}
+class MissionLoading extends MissionState {
+  const MissionLoading();
+}
+
+class MissionLocating extends MissionState {
+  const MissionLocating();
+}
 
 class MissionReady extends MissionState {
+  final QuestModel quest;
   final double distanceMeters;
   final double accuracyMeters;
+
   const MissionReady({
+    required this.quest,
     required this.distanceMeters,
     required this.accuracyMeters,
   });
-  @override
-  List<Object?> get props => [distanceMeters, accuracyMeters];
 }
 
-class MissionVerifying extends MissionState {}
+class MissionVerifying extends MissionState {
+  final QuestModel quest;
 
-class MissionSuccess extends MissionState {
-  final int xpEarned;
-  final String message;
-  const MissionSuccess({required this.xpEarned, required this.message});
-  @override
-  List<Object?> get props => [xpEarned, message];
+  const MissionVerifying({required this.quest});
 }
 
 class MissionFailed extends MissionState {
+  final QuestModel quest;
   final String message;
-  const MissionFailed(this.message);
-  @override
-  List<Object?> get props => [message];
+
+  const MissionFailed({required this.quest, required this.message});
+}
+
+class MissionLoaded extends MissionState {
+  final QuestModel quest;
+
+  const MissionLoaded({required this.quest});
+}
+
+class MissionSuccess extends MissionState {
+  final QuestModel quest;
+  final String message;
+
+  const MissionSuccess({required this.quest, required this.message});
 }

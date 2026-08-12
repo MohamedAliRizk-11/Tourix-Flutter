@@ -1,44 +1,60 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/models/quest_model.dart';
 import '../services/quests_service.dart';
 import 'quests_state.dart';
 
 class QuestsCubit extends Cubit<QuestsState> {
   final QuestsService _service;
+
   QuestsCubit({QuestsService? service})
     : _service = service ?? QuestsService(),
-      super(QuestsLoading());
+      super(const QuestsInitial());
 
   Future<void> loadQuests() async {
-    emit(QuestsLoading());
+    emit(const QuestsLoading());
+
     try {
-      final quests = await _service.getQuests();
-      final types = quests.map((q) => q.questType).toSet().toList();
-      final defaultType = types.isNotEmpty ? types.first : '';
+      final List<QuestModel> quests = await _service.getQuests();
+
+      final List<String> types = [
+        'All',
+        ...quests
+            .map((quest) => quest.questType)
+            .where((type) => type.isNotEmpty)
+            .toSet(),
+      ];
+
       emit(
         QuestsLoaded(
           allQuests: quests,
+          filteredQuests: quests,
           questTypes: types,
-          selectedType: defaultType,
-          filteredQuests: quests
-              .where((q) => q.questType == defaultType)
-              .toList(),
+          selectedType: 'All',
         ),
       );
-    } catch (_) {
-      emit(const QuestsError('تعذر تحميل المهام، تأكد إن السيرفر شغال'));
+    } catch (e) {
+      emit(QuestsError(message: e.toString()));
     }
   }
 
   void selectType(String type) {
-    final current = state;
-    if (current is! QuestsLoaded) return;
-    emit(
-      current.copyWith(
-        selectedType: type,
-        filteredQuests: current.allQuests
-            .where((q) => q.questType == type)
-            .toList(),
-      ),
-    );
+    if (state is! QuestsLoaded) {
+      return;
+    }
+
+    final current = state as QuestsLoaded;
+
+    final List<QuestModel> filtered;
+
+    if (type == 'All') {
+      filtered = current.allQuests;
+    } else {
+      filtered = current.allQuests
+          .where((quest) => quest.questType == type)
+          .toList();
+    }
+
+    emit(current.copyWith(selectedType: type, filteredQuests: filtered));
   }
 }

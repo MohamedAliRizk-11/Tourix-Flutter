@@ -6,11 +6,27 @@ import '../../../core/models/place_model.dart';
 class DiscoverService {
   final Dio _dio = DioClient.instance.dio;
 
-  Future<List<PlaceModel>> getDestinations() async {
+  /* Future<List<PlaceModel>> getDestinations() async {
     final response = await _dio.get(ApiConstants.destinations);
     return (response.data as List)
         .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>))
         .toList();
+  }*/
+  Future<List<PlaceModel>> getDestinations() async {
+    print('🚀 Calling: ${ApiConstants.baseUrl}${ApiConstants.destinations}');
+
+    final response = await _dio.get(ApiConstants.destinations);
+
+    print('✅ STATUS: ${response.statusCode}');
+    // print('✅ DATA: ${response.data}');
+
+    final places = (response.data as List)
+        .map((e) => PlaceModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    print('✅ PLACES COUNT: ${places.length}');
+    print('🖼️ FIRST IMAGE URL: ${places.first.imageUrl}');
+    return places;
   }
 
   static const List<String> categories = [
