@@ -2,7 +2,7 @@
 
 ## 📖 Project Overview
 
-Tourix is an AI-powered tourism mobile application designed to enhance the travel experience in Egypt. The application helps users discover hidden attractions, generate personalized travel plans, complete gamified missions, and explore destinations through an interactive and engaging experience.
+Tourix is an AI-powered tourism mobile application designed to enhance the travel experience in Egypt. The application helps users discover hidden attractions, generate personalized travel plans, complete gamified missions, and explore destinations through an interactive and engaging experience.ز
 
 ---
 
